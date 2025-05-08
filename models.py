@@ -26,7 +26,6 @@ class BertTransformer(nn.Module):
         for param in self.bert.parameters():
             param.requires_grad = False
 
-        # 3) Optionally unfreeze last `nfinetune` encoder layers
         n_layers = 12
         if nfinetune > 0:
             # Unfreeze pooler
@@ -38,7 +37,7 @@ class BertTransformer(nn.Module):
                     param.requires_grad = True
 
         # 4) Define a Transformer encoder to replace the GRU
-        #    You can tune nhead, dim_feedforward, activation, etc.
+        #    You can tune nhead, dim_feedforward, activation.
         encoder_layer = TransformerEncoderLayer(
             d_model=nhid,
             nhead=8,                  # Number of attention heads
@@ -127,12 +126,11 @@ class BertTransformer(nn.Module):
             embeddings = embeddings + tp_emb
 
         # 4) Reshape to (chunk_size, batch_size, nhid)
-        #    TransformerEncoder expects shape (seq_len, batch_size, emb_dim),
-        #    so we treat "chunk_size" as the sequence length.
+      
         embeddings = embeddings.reshape(batch_size, chunk_size, nhid)
         embeddings = embeddings.permute(1, 0, 2)  # (chunk_size, batch_size, nhid)
 
-        # ============ Minimal approach: no mask ============
+        #  Minimal approach: no mask 
         # 5) Pass through the Transformer
         outputs = self.encoder(embeddings)  # shape => (chunk_size, batch_size, nhid)
         
