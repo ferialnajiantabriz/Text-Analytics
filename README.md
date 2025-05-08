@@ -95,8 +95,6 @@ python engine.py --corpus swda --mode inference
 ├── models.py            # Transformer-based model with speaker turn embedding
 ├── engine.py            # Training, evaluation, and inference logic
 ├── data/                # CSV files per dataset (train/val/test)
-├── processed_data/      # Saved tokenized and chunked inputs (pickles)
-├── checkpoints/         # Best saved model weights
 └── report.pdf           # Final LaTeX-formatted report (10 pages)
 ```
 
